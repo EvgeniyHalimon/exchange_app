@@ -1,14 +1,13 @@
 import React from 'react';
 import {LineChart, XAxis, Tooltip, CartesianGrid,Line,Legend, YAxis} from 'recharts';
 
-function CurrencyChart({width, height, data, margin}){
-    
+function CurrencyChart({data}){
     return(
         <LineChart
-                width={width}
-                height={height}
+                width={400}
+                height={300}
                 data={data}
-                margin={margin}
+                margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
             >
                 <XAxis dataKey="exchangedate" />
                 <YAxis dataKey="rate"/>

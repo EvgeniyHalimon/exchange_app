@@ -27,10 +27,10 @@ function Chart(){
     const fetchForPeriod = (valCode) => {
         let res = []
         for (let i = 0; i < 9; i++) {
-            let d = new Date()
-            let q = d.toISOString().split('T')[0].split("-").join("") - i
+            let currentDate = new Date()
+            let date = currentDate.toISOString().split('T')[0].split("-").join("") - i
 
-            fetch(`https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=${valCode}&date=${q}`)
+            fetch(`https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=${valCode}&date=${date}`)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -114,10 +114,7 @@ function Chart(){
                 </tbody>
             </Table>
             <CurrencyChart
-                width={400}
-                height={300}
                 data={current.reverse()}
-                margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
             />
             </div>
         </>
