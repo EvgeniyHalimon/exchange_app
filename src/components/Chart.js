@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {LineChart, XAxis, Tooltip, CartesianGrid,Line,Legend, YAxis} from 'recharts';
+import React, {useState, useEffect} from 'react';
 import {Table} from 'react-bootstrap';
+import CurrencyChart from './CurrencyChart';
 
 function Chart(){
     const [error, setError] = useState(null)
@@ -88,6 +88,7 @@ function Chart(){
                 ))}
             </select>
             
+            <div className="block">
             <Table className="currency-table" striped bordered hover>
                 <thead>
                     <tr>
@@ -112,19 +113,13 @@ function Chart(){
                     ))}
                 </tbody>
             </Table>
-            <LineChart
+            <CurrencyChart
                 width={400}
                 height={300}
                 data={current.reverse()}
                 margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-            >
-                <XAxis dataKey="exchangedate" />
-                <YAxis dataKey="rate"/>
-                <Tooltip />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Legend />
-                <Line type="monotone" dataKey="rate" stroke="#ff7300" yAxisId={0} activeDot={{ r: 8 }}/>
-            </LineChart>
+            />
+            </div>
         </>
         )
 }

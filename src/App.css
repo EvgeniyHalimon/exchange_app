@@ -11,6 +11,15 @@
 }
 
 .select{
-  margin-left: 5px;
+  margin-left: 14px;
   margin-bottom: 10px;
+}
+
+.currency-table{
+  width: 70%;
+}
+
+.block{
+  display: flex;
+  justify-content: space-around;
 }
