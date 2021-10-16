@@ -7,7 +7,6 @@ function Chart(){
     const [isLoaded, setIsLoaded] = useState(false)
     const [items, setItems] = useState([])
     const [current, setCurrent] = useState([])
-    const [chart, setChart] = useState([])
     const [currencyState, setCurrencyState] = useState("") 
 
     const fetchCurrency = () => { 
@@ -26,53 +25,33 @@ function Chart(){
     }
 
     const fetchForPeriod = (valCode) => {
-    let res = []
-    let chartRes = []
-    for (let i = 0; i < 7; i++) {
-        let d = new Date()
-        let timestamp = d.setDate(d.getDate()-i)
-        let date = new Date(timestamp)
-        let year = date.getFullYear()
-        let month = date.getMonth() + 1
-        let day = date.getDate()
-    if(month < 10){
-        month = `0${month}`
-    }
-    if(day < 10){
-        day = `0${day}`
-    }
+        let res = []
+        for (let i = 0; i < 9; i++) {
+            let d = new Date()
+            let q = d.toISOString().split('T')[0].split("-").join("") - i
 
-    fetch(`https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=${valCode}&date=${year}${month}${day}`)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                res.unshift(result[0])
-                chartRes.push(result[0])
-                setCurrent([...res])
-                setChart([...chartRes])
-            },
-            (error) => {
-                setIsLoaded(true)
-                setError(error)
-            }
-        )  
+            fetch(`https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json&valcode=${valCode}&date=${q}`)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        res.push(result[0])
+                        setCurrent([...res])
+                    },
+                    (error) => {
+                        setIsLoaded(true)
+                        setError(error)
+                    }
+                )  
         }
     }
 
     useEffect(() => {
         fetchForPeriod(currencyState)
-        fetchCurrency()
     }, [currencyState])
 
-    chart.sort((a, b) => {
-        if (a.exchangedate > b.exchangedate) {
-        return 1
-        }
-        if (a.exchangedate < b.exchangedate) {
-        return -1
-        }
-        return 0
-    })
+    useEffect(() => {
+        fetchCurrency()
+    }, [])
 
     current.sort((a, b) => {
         if (a.exchangedate < b.exchangedate) {
@@ -83,8 +62,6 @@ function Chart(){
         }
         return 0
     })
-
-    let i = 0 
 
     if (error) {
         return <div>Ошибка: {error.message}</div>
@@ -120,8 +97,8 @@ function Chart(){
                     </tr>
                 </thead>
                 <tbody>
-                    {current.map((item) => (
-                        <tr key={i++}>
+                    {current.map((item,index) => (
+                        <tr key={index}>
                             <td>
                                 {item.txt}  
                             </td>
@@ -136,10 +113,10 @@ function Chart(){
                 </tbody>
             </Table>
             <LineChart
-            width={400}
-            height={300}
-            data={chart}
-            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+                width={400}
+                height={300}
+                data={current.reverse()}
+                margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
             >
                 <XAxis dataKey="exchangedate" />
                 <YAxis dataKey="rate"/>
