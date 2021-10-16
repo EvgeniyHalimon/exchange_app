@@ -9,3 +9,8 @@
 .navbar-nav .nav-item:last-child {
   margin-right: 0px;
 }
+
+.select{
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
